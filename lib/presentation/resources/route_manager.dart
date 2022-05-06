@@ -1,8 +1,9 @@
 import 'package:advanced/presentation/forgot_password/forgot_password_view.dart';
 import 'package:advanced/presentation/main/main_view.dart';
+import 'package:advanced/presentation/onBoarding/onBoarding.dart';
+import 'package:advanced/presentation/resources/string_manager.dart';
 import 'package:advanced/presentation/splash/splash_view.dart';
 import 'package:advanced/presentation/store_details/store_details_view.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../login/login_view.dart';
@@ -10,6 +11,7 @@ import '../register/register_view.dart';
 
 class Routes {
   static const String splashRoute = "/";
+  static const String onBoardingRoute = "/onBoarding";
   static const String loginRoute = "/login";
   static const String registerRoute = "/register";
   static const String forgotPasswordRoute = "/forgotPassword";
@@ -22,6 +24,8 @@ class RouteGenerator {
     switch (settings.name) {
       case Routes.splashRoute:
         return MaterialPageRoute(builder: (context) => const SplashView());
+      case Routes.onBoardingRoute:
+        return MaterialPageRoute(builder: (context) => const OnBoardingView());
       case Routes.loginRoute:
         return MaterialPageRoute(builder: (context) => const LoginView());
       case Routes.registerRoute:
@@ -43,12 +47,11 @@ class RouteGenerator {
     return MaterialPageRoute(
         builder: (context) => Scaffold(
               appBar: AppBar(
-                title:
-                    const Text('undefined route'), //todo move to string manager
+                title: const Text(AppString.unDefinedRout),
               ),
               body: const Center(
-                child: Text('undefined route'),
-              ), //todo move to string manager
+                child: Text(AppString.unDefinedRout),
+              ),
             ));
   }
 }
