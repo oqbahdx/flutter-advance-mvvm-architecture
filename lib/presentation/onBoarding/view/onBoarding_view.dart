@@ -144,7 +144,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                   _pageController.animateToPage(_viewModel.goNext(),
                       duration:  const Duration(
                           milliseconds: AppConstants.sliderAnimationTime),
-                      curve: Curves.bounceInOut);
+                      curve: Curves.ease);
                 }),
           )
         ],
