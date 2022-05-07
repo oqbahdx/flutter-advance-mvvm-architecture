@@ -4,8 +4,7 @@ import 'package:advanced/presentation/resources/assets_manager.dart';
 import 'package:advanced/presentation/resources/color_manager.dart';
 import 'package:advanced/presentation/resources/route_manager.dart';
 import 'package:flutter/material.dart';
-
-import '../resources/constants.dart';
+import '../resources/constants_manager.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({Key? key}) : super(key: key);

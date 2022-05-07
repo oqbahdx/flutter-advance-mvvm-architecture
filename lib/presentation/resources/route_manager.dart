@@ -1,6 +1,6 @@
 import 'package:advanced/presentation/forgot_password/forgot_password_view.dart';
 import 'package:advanced/presentation/main/main_view.dart';
-import 'package:advanced/presentation/onBoarding/onBoarding.dart';
+import 'package:advanced/presentation/onBoarding/view/onBoarding_view.dart';
 import 'package:advanced/presentation/resources/string_manager.dart';
 import 'package:advanced/presentation/splash/splash_view.dart';
 import 'package:advanced/presentation/store_details/store_details_view.dart';
