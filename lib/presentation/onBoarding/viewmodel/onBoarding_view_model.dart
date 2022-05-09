@@ -4,7 +4,7 @@ import 'package:advanced/presentation/base/base_view_model.dart';
 import 'package:advanced/presentation/resources/assets_manager.dart';
 import 'package:advanced/presentation/resources/string_manager.dart';
 
-import '../../../domain/models.dart';
+import '../../../domain/model/models.dart';
 
 class OnBoardingViewModel extends BaseViewModel
     with OnBoardingViewModelInputs, OnBoardingViewModelOutputs {
