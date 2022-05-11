@@ -27,7 +27,7 @@ Failure _errorHandler(DioError error){
       }else{
         return DataSource.DEFAULT.getFailure();
       }
-      break;
+
     case DioErrorType.cancel:
       return DataSource.CANCEL.getFailure();
     case DioErrorType.other:
@@ -141,4 +141,8 @@ class ResponseMessage {
   static const String NO_INTERNET_CONNECTION =
       "Please check your internet connection";
   static const String DEFAULT = "Default error";
+}
+class ApiInternalStatus{
+  static const int SUCCESS = 0;
+  static const int FAILURE = 1;
 }
