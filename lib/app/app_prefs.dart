@@ -8,13 +8,13 @@ class AppPreference {
 
   AppPreference(this._sharedPreferences);
 
-  Future<String?> getLanguage() async {
-    String? language = await _sharedPreferences.getString(LANGUAGE_KEY);
+  Future<String> getLanguage() async {
+    String? language = _sharedPreferences.getString(LANGUAGE_KEY);
     if (language != null && language.isNotEmpty) {
       return language;
     } else {
       // return default language
-      LanguageType.ENGLISH;
+     return LanguageType.ENGLISH.getValue();
     }
   }
 }

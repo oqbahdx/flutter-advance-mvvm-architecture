@@ -9,4 +9,12 @@ class AppString {
   static const String onBoardingSubTitle3 = "awesome flutter application #3";
   static const String onBoardingSubTitle4 = "awesome flutter application #4";
   static const String skip = "skip";
+  static const String userName = "User Name";
+  static const String password = "Password";
+  static const String userNameError = "please enter your user name";
+  static const String passwordError = "please enter your password";
+  static const String login = "Login";
+  static const String forgotPassword = "Forgot Password";
+  static const String register = "Not a Member ? Sign UP";
+
 }

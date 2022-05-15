@@ -4,6 +4,7 @@ import '../resources/styles_manager.dart';
 import '../resources/values_manager.dart';
 import 'package:flutter/material.dart';
 
+
 ThemeData getApplicationTheme() {
   return ThemeData(
     // main colors
@@ -13,7 +14,7 @@ ThemeData getApplicationTheme() {
     disabledColor: ColorManager.grey1,
     splashColor: ColorManager.lightPrimary,
     // ripple effect color
-    // cardView theme
+    // cardview theme
     cardTheme: CardTheme(
         color: ColorManager.white,
         shadowColor: ColorManager.grey,
@@ -30,7 +31,6 @@ ThemeData getApplicationTheme() {
     buttonTheme: ButtonThemeData(
         shape: const StadiumBorder(),
         disabledColor: ColorManager.grey1,
-
         buttonColor: ColorManager.primary,
         splashColor: ColorManager.lightPrimary),
 
