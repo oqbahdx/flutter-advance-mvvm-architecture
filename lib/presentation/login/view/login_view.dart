@@ -1,11 +1,10 @@
-import 'package:advanced/domain/repository/repository.dart';
-import 'package:advanced/domain/usecase/login_usaecase.dart';
 import 'package:advanced/presentation/login/viewmodel/login_viewmodel.dart';
 import 'package:advanced/presentation/resources/color_manager.dart';
 import 'package:advanced/presentation/resources/string_manager.dart';
 import 'package:advanced/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 
+import '../../../app/di.dart';
 import '../../resources/assets_manager.dart';
 import '../../resources/route_manager.dart';
 
@@ -18,7 +17,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  final LoginViewModel _viewModel = LoginViewModel();
+  final LoginViewModel _viewModel = instance<LoginViewModel>();
   final TextEditingController _userNameController = TextEditingController();
   final TextEditingController _userPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();

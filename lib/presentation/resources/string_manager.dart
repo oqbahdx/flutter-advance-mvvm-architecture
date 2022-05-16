@@ -16,5 +16,8 @@ class AppString {
   static const String login = "Login";
   static const String forgotPassword = "Forgot Password";
   static const String register = "Not a Member ? Sign UP";
+  static const String loading = "Loading";
+  static const String tryAgain = "Try Again";
+  static const String ok = "Ok";
 
 }
