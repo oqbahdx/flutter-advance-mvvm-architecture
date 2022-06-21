@@ -1,39 +1,46 @@
-import 'package:advanced/app/app_prefs.dart';
-import 'package:advanced/app/constants.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import '../../app/constants.dart';
+import '../../app/prefs.dart';
 
-const String APPLICATION_JSON = "application/json";
-const String CONTENT_TYPE = "content-type";
-const String AUTHORIZATION = "authorization";
-const String ACCEPT = "accept";
-const String DEFAULT_LANGUAGE = "language";
+const String applicationJson = "Application/json";
+const String accept = "accept";
+const String authorization = "authorization";
+const String contentType = "contentType";
+const String defaultLanguage = "language";
 
 class DioFactory {
-  AppPreference _appPreference;
-  DioFactory(this._appPreference);
+  final AppPreferences _appPreferences;
+
+  DioFactory(this._appPreferences);
+
   Future<Dio> getDio() async {
     Dio dio = Dio();
-    String language = await _appPreference.getLanguage();
-    Map<String, String> headers = ({
-      CONTENT_TYPE: APPLICATION_JSON,
-      ACCEPT: APPLICATION_JSON,
-      AUTHORIZATION: "SEND TOKEN HERE",
-      DEFAULT_LANGUAGE: language,
-    });
+
+    String language = await _appPreferences.getAppLanguage();
+    Map<String, String> headers = {
+      contentType: applicationJson,
+      accept: applicationJson,
+      authorization: Constants.token,
+      defaultLanguage: language
+    };
+
     dio.options = BaseOptions(
         baseUrl: Constants.baseUrl,
         headers: headers,
-        receiveTimeout: Constants.apiTimeOut,
-        sendTimeout: Constants.apiTimeOut);
-    if (kDebugMode) {
+        receiveTimeout: Constants.timeOut,
+        sendTimeout: Constants.timeOut);
+
+    if (!kReleaseMode) {
+      // its debug mode so print app logs
       dio.interceptors.add(PrettyDioLogger(
         requestHeader: true,
         requestBody: true,
         responseHeader: true,
       ));
     }
+
     return dio;
   }
 }

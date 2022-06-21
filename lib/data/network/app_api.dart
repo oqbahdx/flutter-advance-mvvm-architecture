@@ -1,16 +1,18 @@
 import 'package:advanced/app/constants.dart';
-import 'package:advanced/data/response/responses.dart';
 import 'package:dio/dio.dart';
-import 'package:retrofit/http.dart';
+import 'package:retrofit/retrofit.dart';
+
+import '../response/response.dart';
 
 part 'app_api.g.dart';
 
 @RestApi(baseUrl: Constants.baseUrl)
-abstract class AppServiceClient {
-  factory AppServiceClient(Dio dio, {String baseUrl}) = _AppServiceClient;
-  @POST("/customers/login")
+abstract class AppServicesClient {
+  factory AppServicesClient(Dio dio, {String baseUrl}) = _AppServicesClient;
+
+  @POST("customers/login")
   Future<AuthenticationResponse> login(
-      @Field("email") String email,
-      @Field("password") String password
-      );
+    @Field("email") String email,
+    @Field("password") String password,
+  );
 }

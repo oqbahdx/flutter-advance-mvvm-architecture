@@ -1,16 +1,15 @@
-import 'package:advanced/presentation/resources/string_manager.dart';
+import 'package:advanced/presentation/resources/color_manager.dart';
+import 'package:advanced/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../domain/model/models.dart';
+import '../../../domain/models/models.dart';
 import '../../resources/assets_manager.dart';
-import '../../resources/color_manager.dart';
-import '../../resources/constants_manager.dart';
-import '../../resources/route_manager.dart';
-import '../../resources/values_manager.dart';
-import '../viewmodel/onBoarding_view_model.dart';
+import '../../resources/constraints_manager.dart';
+import '../../resources/routes_manager.dart';
+import '../../resources/strings_manager.dart';
+import '../viewmodel/onboarding_viewmodel.dart';
 
 class OnBoardingView extends StatefulWidget {
   const OnBoardingView({Key? key}) : super(key: key);
@@ -37,9 +36,9 @@ class _OnBoardingViewState extends State<OnBoardingView> {
   Widget build(BuildContext context) {
     return StreamBuilder<SliderViewObject>(
         stream: _viewModel.outputSliderViewObject,
-        builder: (context, snapshot) {
-               return _getContentWidget(snapshot.data);
-    });
+        builder: (context,snapshot){
+          return _getContentWidget(snapshot.data);
+        });
   }
 
   Widget _getContentWidget(SliderViewObject? sliderViewObject){
@@ -51,7 +50,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
         appBar: AppBar(
           backgroundColor: ColorManager.white,
           elevation: AppSize.s0,
-          systemOverlayStyle: SystemUiOverlayStyle(
+          systemOverlayStyle: const SystemUiOverlayStyle(
               statusBarColor: ColorManager.white,
               statusBarBrightness: Brightness.dark),
         ),
@@ -76,7 +75,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                     Navigator.pushReplacementNamed(context, Routes.loginRoute);
                   },
                   child: Text(
-                    AppString.skip,
+                    AppStrings.skip,
                     style: Theme.of(context).textTheme.titleMedium,
                     textAlign: TextAlign.end,
                   ),
@@ -84,7 +83,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
               ),
 
               // widgets indicator and arrows
-              _getBottomSheetWidget(sliderViewObject),
+              _getBottomSheetWidget(sliderViewObject)
             ],
           ),
         ),
@@ -111,9 +110,9 @@ class _OnBoardingViewState extends State<OnBoardingView> {
               onTap: () {
                 // go to previous slide
                 _pageController.animateToPage(_viewModel.goPrevious(),
-                    duration: const Duration(
+                    duration:  const Duration(
                         milliseconds: AppConstants.sliderAnimationTime),
-                    curve: Curves.ease);
+                    curve: Curves.bounceInOut);
               },
             ),
           )
@@ -124,7 +123,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
           ,
           Row(
             children: [
-              for (int i = 0; i <sliderViewObject.numOfSlides ; i++)
+              for (int i = 0; i < sliderViewObject.numOfSlides; i++)
                 Padding(
                   padding: const EdgeInsets.all(AppPadding.p8),
                   child: _getProperCircle(i,sliderViewObject.currentIndex),
@@ -142,9 +141,9 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                 onTap: () {
                   // go to previous slide
                   _pageController.animateToPage(_viewModel.goNext(),
-                      duration:  const Duration(
+                      duration: const Duration(
                           milliseconds: AppConstants.sliderAnimationTime),
-                      curve: Curves.ease);
+                      curve: Curves.bounceInOut);
                 }),
           )
         ],
@@ -198,4 +197,5 @@ class OnBoardingPage extends StatelessWidget {
         SvgPicture.asset(_sliderObject.image)
       ],
     );
-  }}
+  }
+}

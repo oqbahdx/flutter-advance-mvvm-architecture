@@ -1,20 +1,19 @@
+import 'package:advanced/data/network/app_api.dart';
 import 'package:advanced/data/network/requests.dart';
-
-import '../network/app_api.dart';
-import '../response/responses.dart';
+import 'package:advanced/data/response/response.dart';
 
 abstract class RemoteDataSource {
-  Future<AuthenticationResponse> login(LoginRequests loginRequest);
+  Future<AuthenticationResponse> login(LoginRequest loginRequest);
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
-  final AppServiceClient _appServiceClient;
+  final AppServicesClient _appServicesClient;
 
-  RemoteDataSourceImpl(this._appServiceClient);
+  RemoteDataSourceImpl(this._appServicesClient);
 
   @override
-  Future<AuthenticationResponse> login(LoginRequests loginRequest) async {
-    return await _appServiceClient.login(
+  Future<AuthenticationResponse> login(LoginRequest loginRequest) async {
+    return await _appServicesClient.login(
         loginRequest.email, loginRequest.password);
   }
 }

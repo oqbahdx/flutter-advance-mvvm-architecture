@@ -1,4 +1,4 @@
-import 'package:advanced/app/constants.dart';
+import 'constants.dart';
 
 extension NonNullString on String? {
   String orEmpty() {
@@ -18,10 +18,4 @@ extension NonNullInteger on int? {
       return this!;
     }
   }
-}
-void test(){
-  String? name;
-  int? num;
-  print(name.orEmpty());
-  print(num.orZero());
 }

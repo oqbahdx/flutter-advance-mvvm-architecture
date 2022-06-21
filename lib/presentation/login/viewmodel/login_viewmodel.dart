@@ -1,11 +1,7 @@
 import 'dart:async';
-
-import 'package:advanced/domain/usecase/login_usaecase.dart';
-import 'package:advanced/presentation/base/base_view_model.dart';
-
+import 'package:advanced/presentation/base/baseviewmodel.dart';
+import '../../../domain/usecase/login_usecase.dart';
 import '../../common/freezed_data_classes.dart';
-
-
 
 class LoginViewModel extends BaseViewModel
     with LoginViewModelInputs, LoginViewModelOutputs {
@@ -16,10 +12,12 @@ class LoginViewModel extends BaseViewModel
 
   final StreamController _areAllInputsValidStreamController =
   StreamController<void>.broadcast();
-  final LoginUseCase _loginUseCase;
+
   var loginObject = LoginObject("", "");
+  final LoginUseCase _loginUseCase;
 
   LoginViewModel(this._loginUseCase);
+
 
   // inputs
   @override
@@ -59,7 +57,6 @@ class LoginViewModel extends BaseViewModel
 
   @override
   login() async {
-
     (await _loginUseCase.execute(
             LoginUseCaseInput(loginObject.userName, loginObject.password)))
         .fold(
@@ -69,7 +66,7 @@ class LoginViewModel extends BaseViewModel
                 },
             (data) => {
                   // right -> data (success)
-                  print(data.customers?.name)
+                  print(data.customer?.name)
                 });
   }
 
@@ -122,3 +119,4 @@ abstract class LoginViewModelOutputs {
 
   Stream<bool> get outAreAllInputsValid;
 }
+

@@ -1,73 +1,99 @@
 import 'package:advanced/presentation/resources/assets_manager.dart';
 import 'package:advanced/presentation/resources/color_manager.dart';
-import 'package:advanced/presentation/resources/font_manager.dart';
-import 'package:advanced/presentation/resources/string_manager.dart';
+import 'package:advanced/presentation/resources/strings_manager.dart';
 import 'package:advanced/presentation/resources/styles_manager.dart';
+import 'package:advanced/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import '../../resources/values_manager.dart';
 
 enum StateRendererType {
-  // popup state renderer
+  // popup state
   popupLoadingState,
   popupErrorState,
-  // full screen renderer
-  fullScreenLoadingSate,
+  // full screen state
+  fullScreenLoadingState,
   fullScreenErrorState,
-  fullScreenEmpty,
-  // general
+  // content
   contentState
 }
 
 class StateRenderer extends StatelessWidget {
+  final StateRendererType stateRendererType;
+  final String message;
+  final String title;
+  final Function actionFunction;
+
   const StateRenderer(
       {Key? key,
       required this.stateRendererType,
-      this.message = "",
+      this.message = AppStrings.loading,
       this.title = "",
-      required this.retryActionFunction})
+      required this.actionFunction})
       : super(key: key);
-  final StateRendererType stateRendererType;
-  final String title;
-  final String message;
-  final Function retryActionFunction;
 
   @override
   Widget build(BuildContext context) {
-    return _getStateWidget(context);
+    return  _contentWidget(context);
   }
 
-  Widget _getStateWidget(BuildContext context) {
+  Widget _contentWidget(BuildContext context) {
     switch (stateRendererType) {
       case StateRendererType.popupLoadingState:
-        return _getPopupDialog(
-            context, [_getAnimatedImage(JsonAssets.loading)]);
+       return _getPopupDialog([
+         _getAnimatedImage(JsonAssets.loading)
+       ]);
       case StateRendererType.popupErrorState:
-        return _getPopupDialog(context, [
-          _getAnimatedImage(JsonAssets.error),
-          _getMessageTitle(message),
-          _getRetryButton(AppString.ok, context),
-        ]);
-      case StateRendererType.fullScreenLoadingSate:
+       return _getPopupDialog([
+         _getAnimatedImage(JsonAssets.error),
+         _getMessage(message),
+         _retryButton(AppStrings.ok, context)
+       ]);
+      case StateRendererType.fullScreenLoadingState:
         return _getItemsColumn([
           _getAnimatedImage(JsonAssets.loading),
-          _getMessageTitle(message),
+          _getMessage(message),
         ]);
       case StateRendererType.fullScreenErrorState:
         return _getItemsColumn([
           _getAnimatedImage(JsonAssets.error),
-          _getMessageTitle(message),
-          _getRetryButton(AppString.tryAgain, context)
-        ]);
-      case StateRendererType.fullScreenEmpty:
-        return _getItemsColumn([
-          _getAnimatedImage(JsonAssets.empty),
-          _getMessageTitle(message),
+          _getMessage(message),
+          _retryButton(AppStrings.retryAgain,context)
         ]);
       case StateRendererType.contentState:
         return Container();
+      default:
+        return Container();
     }
   }
+ Widget _getPopupDialog(List<Widget> children){
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppSize.s14),
+      ),
+      elevation: AppSize.s1_5,
+      backgroundColor: ColorManager.transparent,
+      child: Container(
+        decoration: const BoxDecoration(
+          color: ColorManager.white,
+          shape: BoxShape.rectangle,
+          boxShadow: [
+            BoxShadow(
+              color: ColorManager.black26
+            ),
+          ]
+        ),
+        child: _getDialogContent(children),
+      ),
+    );
+ }
+
+ Widget _getDialogContent(List<Widget> children){
+      return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: children,
+    );
+ }
 
   Widget _getItemsColumn(List<Widget> children) {
     return Column(
@@ -81,64 +107,36 @@ class StateRenderer extends StatelessWidget {
     return SizedBox(
       height: AppSize.s100,
       width: AppSize.s100,
-      child: Lottie.asset(animationName),
+      child: Lottie.asset(animationName),//todo add image json here
     );
   }
 
-  Widget _getMessageTitle(String message) {
+  Widget _getMessage(String message) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(AppPadding.p8),
         child: Text(
-          title,
-          style: getRegularStyle(
-              color: ColorManager.black, fontSize: FontSize.s18),
+          message,
+          style: getRegularStyle(color: ColorManager.black),
         ),
       ),
     );
   }
 
-  Widget _getRetryButton(String buttonMessage, BuildContext context) {
-    return Center(
-        child: Padding(
-      padding: const EdgeInsets.all(AppPadding.p8),
-      child: SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-              onPressed: () {
-                if (stateRendererType ==
-                    StateRendererType.fullScreenErrorState) {
-                  retryActionFunction.call();
-                } else {
-                  Navigator.of(context).pop();
-                }
-              },
-              child: Text(buttonMessage))),
-    ));
-  }
-
-  Widget _getPopupDialog(BuildContext context, List<Widget> children) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppSize.s14),
-      ),
-      elevation: AppSize.s1_5,
-      backgroundColor: ColorManager.transparent,
-      child: Container(
-        decoration: BoxDecoration(color: ColorManager.white, boxShadow: [
-          BoxShadow(color: ColorManager.black26),
-        ]),
-        child: _getDialogContent(context, children),
-      ),
-    );
-  }
-
-  Widget _getDialogContent(BuildContext context, List<Widget> children) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: children,
-    );
-    ;
+  Widget _retryButton(String buttonTitle,BuildContext context) {
+    return SizedBox(
+        width: double.infinity,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(AppPadding.p18),
+            child: ElevatedButton(onPressed: () {
+              if(stateRendererType == StateRendererType.fullScreenErrorState){
+                actionFunction.call();
+              }else{
+                Navigator.of(context).pop();
+              }
+            }, child: Text(buttonTitle)),
+          ),
+        ));
   }
 }

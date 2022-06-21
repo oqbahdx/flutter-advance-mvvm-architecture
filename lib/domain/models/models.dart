@@ -1,5 +1,4 @@
-// onBoarding model
-
+// on boarding models
 class SliderObject {
   String title;
   String subTitle;
@@ -15,25 +14,26 @@ class SliderViewObject {
 
   SliderViewObject(this.sliderObject, this.numOfSlides, this.currentIndex);
 }
-// login model
-class Customers {
-  String id;
+
+class Customer {
+  int id;
   String name;
   int numOfNotifications;
 
-  Customers(this.id, this.name, this.numOfNotifications);
+  Customer(this.id, this.name, this.numOfNotifications);
 }
 
-class Contacts {
+class Contact {
   String phone;
   String email;
+  String link;
 
-  Contacts(this.phone, this.email);
+  Contact(this.phone, this.email, this.link);
 }
 
 class Authentication {
-  Customers? customers;
-  Contacts? contacts;
+  Customer? customer;
+  Contact? contact;
 
-  Authentication(this.customers, this.contacts);
+  Authentication(this.customer, this.contact);
 }

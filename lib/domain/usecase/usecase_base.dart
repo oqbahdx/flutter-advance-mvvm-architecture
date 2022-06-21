@@ -1,8 +1,7 @@
 import 'package:advanced/data/network/failure.dart';
 import 'package:dartz/dartz.dart';
 
-abstract class BaseUseCase<In,Out>{
+abstract class UseCaseBase<In,Out> {
 
-  Future<Either<Failure,Out>> execute (In input);
-
+  Future<Either<Failure,Out>> execute(In input);
 }
