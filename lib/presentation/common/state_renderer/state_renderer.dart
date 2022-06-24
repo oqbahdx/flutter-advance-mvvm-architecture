@@ -13,6 +13,8 @@ enum StateRendererType {
   // full screen state
   fullScreenLoadingState,
   fullScreenErrorState,
+  // empty
+  fullScreenEmptyState,
   // content
   contentState
 }
