@@ -2,26 +2,27 @@ import 'dart:async';
 import 'package:advanced/presentation/base/baseviewmodel.dart';
 import '../../../domain/usecase/login_usecase.dart';
 import '../../common/freezed_data_classes.dart';
+import '../../common/state_renderer/state_renderer_impl.dart';
 
 class LoginViewModel extends BaseViewModel
     with LoginViewModelInputs, LoginViewModelOutputs {
   final StreamController _userNameStreamController =
-  StreamController<String>.broadcast();
+      StreamController<String>.broadcast();
   final StreamController _passwordStreamController =
-  StreamController<String>.broadcast();
+      StreamController<String>.broadcast();
 
   final StreamController _areAllInputsValidStreamController =
-  StreamController<void>.broadcast();
+      StreamController<void>.broadcast();
 
   var loginObject = LoginObject("", "");
   final LoginUseCase _loginUseCase;
 
   LoginViewModel(this._loginUseCase);
 
-
   // inputs
   @override
   void dispose() {
+    super.dispose();
     _userNameStreamController.close();
     _passwordStreamController.close();
     _areAllInputsValidStreamController.close();
@@ -29,7 +30,7 @@ class LoginViewModel extends BaseViewModel
 
   @override
   void start() {
-    // TODO: implement start
+    inputState.add(ContentState());
   }
 
   @override
@@ -119,4 +120,3 @@ abstract class LoginViewModelOutputs {
 
   Stream<bool> get outAreAllInputsValid;
 }
-

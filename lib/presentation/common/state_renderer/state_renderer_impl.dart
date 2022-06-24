@@ -59,49 +59,77 @@ class ErrorState extends FlowState {
   StateRendererType getStateRendererType() => stateRendererType;
 }
 
-extension FlowStateExtension on FlowState{
-  Widget getContent(BuildContext context ,Widget contentScreenWidget,Function retryAction){
-    switch(runtimeType){
-      case LoadingState:{
-        if(getStateRendererType() == StateRendererType.popupLoadingState){
-          // show popup screen
-          showPopup(context,
-              getStateRendererType(), getMessage());
-          // show content
-          return contentScreenWidget;
-        }else{
-          // show full screen
-          return StateRenderer(stateRendererType: getStateRendererType(),
-              actionFunction: retryAction,message: getMessage(),);
+extension FlowStateExtension on FlowState {
+  Widget getContent(
+      BuildContext context, Widget contentScreenWidget, Function retryAction) {
+    switch (runtimeType) {
+      case LoadingState:
+        {
+          if (getStateRendererType() == StateRendererType.popupLoadingState) {
+            // show popup screen
+            showPopup(context, getStateRendererType(), getMessage());
+            // show content
+            return contentScreenWidget;
+          } else {
+            // show full screen
+            return StateRenderer(
+              stateRendererType: getStateRendererType(),
+              actionFunction: retryAction,
+              message: getMessage(),
+            );
+          }
         }
-      }
-      case ContentState:{
-        return contentScreenWidget;
-      }
-      case EmptyState:{
-        return StateRenderer(stateRendererType: getStateRendererType(),
-            actionFunction: (){},message: getMessage(),);
-      }
-      case ErrorState:{
-        if(getStateRendererType() == StateRendererType.popupErrorState){
-          showPopup(context, getStateRendererType(), getMessage());
+      case ContentState:
+        {
+          dismissDialog(context);
           return contentScreenWidget;
-        }else{
-          return StateRenderer(stateRendererType: getStateRendererType(),
-              actionFunction: retryAction,message: getMessage(),);
         }
-      }
-      default:{
-       return contentScreenWidget;
-      }
+      case EmptyState:
+        {
+          return StateRenderer(
+            stateRendererType: getStateRendererType(),
+            actionFunction: () {},
+            message: getMessage(),
+          );
+        }
+      case ErrorState:
+        {
+          dismissDialog(context);
+          if (getStateRendererType() == StateRendererType.popupErrorState) {
+            showPopup(context, getStateRendererType(), getMessage());
+            return contentScreenWidget;
+          } else {
+            return StateRenderer(
+              stateRendererType: getStateRendererType(),
+              actionFunction: retryAction,
+              message: getMessage(),
+            );
+          }
+        }
+      default:
+        {
+          dismissDialog(context);
+          return contentScreenWidget;
+        }
     }
   }
-  showPopup(BuildContext context , StateRendererType stateRendererType,String message) {
-    WidgetsBinding.instance.addPostFrameCallback((_) => showDialog(context: context,
-        builder: (BuildContext context)=>StateRenderer(stateRendererType: stateRendererType,
-           message: message,
-            actionFunction: (){
 
-            })));
+  _isCurrentDialogShowing(BuildContext context) =>
+      ModalRoute.of(context)?.isCurrent != true;
+
+  dismissDialog(BuildContext context) {
+    if (_isCurrentDialogShowing(context)) {
+      Navigator.of(context, rootNavigator: true).pop(true);
+    }
+  }
+
+  showPopup(BuildContext context, StateRendererType stateRendererType,
+      String message) {
+    WidgetsBinding.instance.addPostFrameCallback((_) => showDialog(
+        context: context,
+        builder: (BuildContext context) => StateRenderer(
+            stateRendererType: stateRendererType,
+            message: message,
+            actionFunction: () {})));
   }
 }
