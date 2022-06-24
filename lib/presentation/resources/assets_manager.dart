@@ -1,5 +1,5 @@
 const String imagePath = "assets/images";
-const String jsonPath = "assets/images";
+const String jsonPath = "assets/json";
 
 class ImageAssets {
   static const splashLogo = "$imagePath/splash_logo.png";
@@ -15,7 +15,7 @@ class ImageAssets {
 }
 
 class JsonAssets{
-  static const loading = "$imagePath/loading.json";
-  static const error = "$imagePath/error.json";
-  static const empty = "$imagePath/empty.json";
+  static const loading = "$jsonPath/loading.json";
+  static const error = "$jsonPath/error.json";
+  static const empty = "$jsonPath/empty.json";
 }
