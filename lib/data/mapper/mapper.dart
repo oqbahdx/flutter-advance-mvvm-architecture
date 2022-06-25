@@ -1,27 +1,28 @@
-import 'package:advanced/app/extensions.dart';
-import 'package:advanced/data/response/response.dart';
-import 'package:advanced/domain/models/models.dart';
-
 import '../../app/constants.dart';
+import '../../domain/model/models.dart';
+import '../response/responses.dart';
+import 'package:advanced_flutter_arabic/app/extensions.dart';
 
 extension CustomerResponseMapper on CustomerResponse? {
   Customer toDomain() {
     return Customer(
-        this?.id.orZero() ?? Constants.zero,
-        this?.name.orEmpty() ?? "",
+        this?.id.orEmpty() ?? Constants.empty,
+        this?.name.orEmpty() ?? Constants.empty,
         this?.numOfNotifications.orZero() ?? Constants.zero);
   }
 }
 
-extension ContactResponseMapper on ContactResponse? {
-  Contact toDomain() {
-    return Contact(this?.phone.orEmpty() ?? Constants.empty,
-        this?.email.orEmpty() ?? "", this?.link.orEmpty() ?? Constants.empty);
+extension ContactsResponseMapper on ContactsResponse? {
+  Contacts toDomain() {
+    return Contacts(
+        this?.phone.orEmpty() ?? Constants.empty,
+        this?.email.orEmpty() ?? Constants.empty,
+        this?.link.orEmpty() ?? Constants.empty);
   }
 }
 
-extension AuthenticaionResponseMapper on AuthenticationResponse? {
+extension AuthenticationResponseMapper on AuthenticationResponse? {
   Authentication toDomain() {
-    return Authentication(this?.customer.toDomain(), this?.contact.toDomain());
+    return Authentication(this?.customer.toDomain(), this?.contacts.toDomain());
   }
 }

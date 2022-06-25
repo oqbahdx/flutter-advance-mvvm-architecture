@@ -1,14 +1,14 @@
+import 'package:advanced_flutter_arabic/app/app_prefs.dart';
+import 'package:advanced_flutter_arabic/app/constants.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import '../../app/constants.dart';
-import '../../app/prefs.dart';
 
-const String applicationJson = "Application/json";
-const String accept = "accept";
-const String authorization = "authorization";
-const String contentType = "contentType";
-const String defaultLanguage = "language";
+const String APPLICATION_JSON = "application/json";
+const String CONTENT_TYPE = "content-type";
+const String ACCEPT = "accept";
+const String AUTHORIZATION = "authorization";
+const String DEFAULT_LANGUAGE = "language";
 
 class DioFactory {
   final AppPreferences _appPreferences;
@@ -20,17 +20,17 @@ class DioFactory {
 
     String language = await _appPreferences.getAppLanguage();
     Map<String, String> headers = {
-      contentType: applicationJson,
-      accept: applicationJson,
-      authorization: Constants.token,
-      defaultLanguage: language
+      CONTENT_TYPE: APPLICATION_JSON,
+      ACCEPT: APPLICATION_JSON,
+      AUTHORIZATION: Constants.token,
+      DEFAULT_LANGUAGE: language
     };
 
     dio.options = BaseOptions(
         baseUrl: Constants.baseUrl,
         headers: headers,
-        receiveTimeout: Constants.timeOut,
-        sendTimeout: Constants.timeOut);
+        receiveTimeout: Constants.apiTimeOut,
+        sendTimeout: Constants.apiTimeOut);
 
     if (!kReleaseMode) {
       // its debug mode so print app logs

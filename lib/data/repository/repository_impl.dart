@@ -1,12 +1,16 @@
-import 'package:advanced/data/data_source/remote_data_source.dart';
-import 'package:advanced/data/mapper/mapper.dart';
-import 'package:advanced/data/network/error_handler.dart';
-import 'package:advanced/data/network/failure.dart';
-import 'package:advanced/data/network/network_info.dart';
-import 'package:advanced/data/network/requests.dart';
-import 'package:advanced/domain/models/models.dart';
-import 'package:advanced/domain/repository/repository.dart';
+import 'package:advanced_flutter_arabic/data/data_source/remote_data_source.dart';
+import 'package:advanced_flutter_arabic/data/mapper/mapper.dart';
+import 'package:advanced_flutter_arabic/data/network/error_handler.dart';
+import 'package:advanced_flutter_arabic/data/network/failure.dart';
+import 'package:advanced_flutter_arabic/data/network/network_info.dart';
+
+import 'package:advanced_flutter_arabic/data/network/requests.dart';
+
+import 'package:advanced_flutter_arabic/domain/model/models.dart';
+
 import 'package:dartz/dartz.dart';
+
+import '../../domain/repository/repository.dart';
 
 class RepositoryImpl implements Repository {
   final RemoteDataSource _remoteDataSource;
@@ -18,23 +22,27 @@ class RepositoryImpl implements Repository {
   Future<Either<Failure, Authentication>> login(
       LoginRequest loginRequest) async {
     if (await _networkInfo.isConnected) {
-      // its connected its save to call api
-      try {
+      // its connected to internet, its safe to call API
+      try{
         final response = await _remoteDataSource.login(loginRequest);
-        if (response.status == ApiInternalError.success) {
+
+        if (response.status == ApiInternalStatus.SUCCESS) {
+          // success
+          // return either right
+          // return data
           return Right(response.toDomain());
         } else {
-          // business error
-          return Left(Failure(ApiInternalError.failure,
-              response.message ?? ResponseMessage.theDefault));
+          // failure --return business error
+          // return either left
+          return Left(Failure(ApiInternalStatus.FAILURE, response.message ?? ResponseMessage.DEFAULT));
         }
-      } catch (error) {
+      }catch(error){
         return Left(ErrorHandler.handle(error).failure);
       }
     } else {
-      // no inter net connection
-      return Left(Failure(ResponseCode.noInternetConnection,
-          ResponseMessage.noInternetConnection));
+      // return internet connection error
+      // return either left
+      return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
     }
   }
 }

@@ -1,13 +1,16 @@
-import 'package:advanced/app/constants.dart';
-import 'package:advanced/presentation/common/state_renderer/state_renderer.dart';
-import 'package:advanced/presentation/resources/strings_manager.dart';
+
+import 'package:advanced_flutter_arabic/app/constants.dart';
+import 'package:advanced_flutter_arabic/presentation/common/state_renderer/state_renderer.dart';
 import 'package:flutter/material.dart';
+
+import '../../resources/strings_manager.dart';
 
 abstract class FlowState {
   StateRendererType getStateRendererType();
 
   String getMessage();
 }
+// loading state (POPUP,FULL SCREEN)
 
 class LoadingState extends FlowState {
   StateRendererType stateRendererType;
@@ -23,6 +26,22 @@ class LoadingState extends FlowState {
   StateRendererType getStateRendererType() => stateRendererType;
 }
 
+// error state (POPUP,FULL SCREEN)
+class ErrorState extends FlowState {
+  StateRendererType stateRendererType;
+  String message;
+
+  ErrorState(this.stateRendererType, this.message);
+
+  @override
+  String getMessage() => message;
+
+  @override
+  StateRendererType getStateRendererType() => stateRendererType;
+}
+
+// content state
+
 class ContentState extends FlowState {
   ContentState();
 
@@ -32,6 +51,8 @@ class ContentState extends FlowState {
   @override
   StateRendererType getStateRendererType() => StateRendererType.contentState;
 }
+
+// EMPTY STATE
 
 class EmptyState extends FlowState {
   String message;
@@ -46,65 +67,52 @@ class EmptyState extends FlowState {
       StateRendererType.fullScreenEmptyState;
 }
 
-class ErrorState extends FlowState {
-  StateRendererType stateRendererType;
-  String message;
-
-  ErrorState(this.message, this.stateRendererType);
-
-  @override
-  String getMessage() => message;
-
-  @override
-  StateRendererType getStateRendererType() => stateRendererType;
-}
-
 extension FlowStateExtension on FlowState {
-  Widget getContent(
-      BuildContext context, Widget contentScreenWidget, Function retryAction) {
+  Widget getScreenWidget(BuildContext context, Widget contentScreenWidget,
+      Function retryActionFunction) {
     switch (runtimeType) {
       case LoadingState:
         {
           if (getStateRendererType() == StateRendererType.popupLoadingState) {
-            // show popup screen
+            // show popup loading
             showPopup(context, getStateRendererType(), getMessage());
-            // show content
+            // show content ui of the screen
             return contentScreenWidget;
           } else {
-            // show full screen
+            // full screen loading state
             return StateRenderer(
-              stateRendererType: getStateRendererType(),
-              actionFunction: retryAction,
-              message: getMessage(),
-            );
+                message: getMessage(),
+                stateRendererType: getStateRendererType(),
+                retryActionFunction: retryActionFunction);
           }
-        }
-      case ContentState:
-        {
-          dismissDialog(context);
-          return contentScreenWidget;
-        }
-      case EmptyState:
-        {
-          return StateRenderer(
-            stateRendererType: getStateRendererType(),
-            actionFunction: () {},
-            message: getMessage(),
-          );
         }
       case ErrorState:
         {
           dismissDialog(context);
           if (getStateRendererType() == StateRendererType.popupErrorState) {
+            // show popup error
             showPopup(context, getStateRendererType(), getMessage());
+            // show content ui of the screen
             return contentScreenWidget;
           } else {
+            // full screen error state
             return StateRenderer(
-              stateRendererType: getStateRendererType(),
-              actionFunction: retryAction,
-              message: getMessage(),
-            );
+                message: getMessage(),
+                stateRendererType: getStateRendererType(),
+                retryActionFunction: retryActionFunction);
           }
+        }
+      case EmptyState:
+        {
+          return StateRenderer(
+              stateRendererType: getStateRendererType(),
+              message: getMessage(),
+              retryActionFunction: () {});
+        }
+      case ContentState:
+        {
+          dismissDialog(context);
+          return contentScreenWidget;
         }
       default:
         {
@@ -130,6 +138,6 @@ extension FlowStateExtension on FlowState {
         builder: (BuildContext context) => StateRenderer(
             stateRendererType: stateRendererType,
             message: message,
-            actionFunction: () {})));
+            retryActionFunction: () {})));
   }
 }

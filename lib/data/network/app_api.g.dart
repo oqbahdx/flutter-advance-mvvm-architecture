@@ -8,9 +8,9 @@ part of 'app_api.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps
 
-class _AppServicesClient implements AppServicesClient {
-  _AppServicesClient(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'https://oqbahdx.mocklab.io/';
+class _AppServiceClient implements AppServiceClient {
+  _AppServiceClient(this._dio, {this.baseUrl}) {
+    baseUrl ??= 'http://minafarid246.mocklab.io';
   }
 
   final Dio _dio;
@@ -26,7 +26,7 @@ class _AppServicesClient implements AppServicesClient {
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<AuthenticationResponse>(
             Options(method: 'POST', headers: _headers, extra: _extra)
-                .compose(_dio.options, 'customers/login',
+                .compose(_dio.options, '/customers/login',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = AuthenticationResponse.fromJson(_result.data!);
