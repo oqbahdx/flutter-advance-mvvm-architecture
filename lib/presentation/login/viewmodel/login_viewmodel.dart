@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:advanced/presentation/base/baseviewmodel.dart';
 import 'package:advanced/presentation/common/state_renderer/state_renderer.dart';
+import 'package:flutter/foundation.dart';
 import '../../../domain/usecase/login_usecase.dart';
 import '../../common/freezed_data_classes.dart';
 import '../../common/state_renderer/state_renderer_impl.dart';
@@ -14,7 +15,7 @@ class LoginViewModel extends BaseViewModel
 
   final StreamController _areAllInputsValidStreamController =
       StreamController<void>.broadcast();
-
+  final StreamController isUserLoggedInSuccessfully = StreamController<bool>();
   var loginObject = LoginObject("", "");
   final LoginUseCase _loginUseCase;
 
@@ -27,6 +28,7 @@ class LoginViewModel extends BaseViewModel
     _userNameStreamController.close();
     _passwordStreamController.close();
     _areAllInputsValidStreamController.close();
+    isUserLoggedInSuccessfully.close();
   }
 
   @override
@@ -59,20 +61,25 @@ class LoginViewModel extends BaseViewModel
 
   @override
   login() async {
-    inputState.add(LoadingState(stateRendererType: StateRendererType.popupLoadingState,));
+    inputState.add(LoadingState(
+      stateRendererType: StateRendererType.popupLoadingState,
+    ));
     (await _loginUseCase.execute(
             LoginUseCaseInput(loginObject.userName, loginObject.password)))
         .fold(
             (failure) => {
                   // left -> failure
-              inputState.add(ErrorState(failure.message, StateRendererType.popupErrorState))
+                  inputState.add(ErrorState(
+                      failure.message, StateRendererType.popupErrorState))
                   // print(failure.message)
-                },
-            (data) => {
-                  // right -> data (success)
-                  inputState.add(ContentState())
-                  // print(data.customer?.name)
-                });
+                }, (data) {
+      // right -> data (success)
+      inputState.add(ContentState());
+      isUserLoggedInSuccessfully.add(true);
+       if (kDebugMode) {
+         print(data.customer?.name);
+       }
+    });
   }
 
   // outputs
