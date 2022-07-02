@@ -27,4 +27,8 @@ class AppStrings {
   static const String emailHint = 'Email';
   static const String invalidEmail = "Invalid Email";
   static const String resetPassword = "Reset Password";
+  static const String userNameErrorInvalid = "user name should be at least 8 char";
+  static const String emailInvalid = "email invalid format";
+  static const String mobileNumberInvalid = "mobile number invalid";
+  static const String passwordInvalid = "password should be at least 6 digits";
 }
